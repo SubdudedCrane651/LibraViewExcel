@@ -62,7 +62,7 @@ def process_csv():
     final_df = final_df.round(1)
 
     # Open existing macro-enabled Excel file
-    output_file = "glucose_report.xlsm"
+    output_file = r"C:\\Users\\rchrd\\Documents\\Richard\\glucose_report.xlsm"
     try:
         wb = xw.Book(output_file)  # Open existing workbook
     except FileNotFoundError:
@@ -85,7 +85,7 @@ def process_csv():
     messagebox.showinfo("Success", f"Data successfully updated in {output_file} and opened!")
     
     # Open the Excel file automatically
-    os.startfile(output_file)
+    #os.startfile(output_file)
 
 # Create GUI window
 root = tk.Tk()
