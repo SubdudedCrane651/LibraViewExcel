@@ -29,8 +29,8 @@ def process_csv():
         if pd.isna(timestamp): 
             return None
         hour = timestamp.hour
-        if 24 <= hour < 9:
-            return "Morning (24:01-9:00)"
+        if 1 <= hour < 9:
+            return "Morning (1:00-9:00)"
         elif 9 <= hour < 12:
             return "Before Lunch (9:01-12:00)"
         elif 12 <= hour < 18:
@@ -55,7 +55,7 @@ def process_csv():
     final_df.reset_index(inplace=True)
 
     # Sort columns in the correct order
-    ordered_columns = ["Date", "Morning (24:01-9:00)", "Before Lunch (9:01-12:00)", "Before Dinner (12:01-18:00)", "Evening (18:01-24:00)"]
+    ordered_columns = ["Date", "Morning (1:00-9:00)", "Before Lunch (9:01-12:00)", "Before Dinner (12:01-18:00)", "Evening (18:01-24:00)"]
     final_df = final_df.reindex(columns=ordered_columns)
 
     # Format numbers to one decimal place
