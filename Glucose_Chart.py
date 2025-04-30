@@ -98,3 +98,32 @@ plt.tight_layout()
 output_image = r"C:\Users\rchrd\Documents\Richard\GlucoseReading3D.png"
 plt.savefig(output_image, dpi=300)
 plt.show()
+
+import win32com.client
+
+# Define file paths
+file_path = r"C:\Users\rchrd\Documents\Richard\glucose_report.xlsm"
+image_path = r"C:\Users\rchrd\Documents\Richard\GlucoseReading3D.png"
+
+# Connect to Excel application
+excel = win32com.client.Dispatch("Excel.Application")
+
+# Check if the file is already open
+for wb in excel.Workbooks:
+    if wb.FullName.lower() == file_path.lower():
+        ws = wb.Sheets("Glycèmie De Richard Perreault")  # Select the correct sheet
+        
+        # **Remove existing images**
+        for shape in ws.Shapes:
+            if shape.Type == 13:  # 13 = Image type
+                shape.Delete()
+
+        # **Insert the new image at K27 with custom size**
+        ws.Shapes.AddPicture(image_path, 1, 1, ws.Range("K27").Left, ws.Range("K27").Top, 640,400)  # Adjust size
+
+        # Save the file (while keeping it open)
+        wb.Save()
+        print("Image inserted successfully!")
+        break
+else:
+    print("Excel file is not open. Please open it first.")
