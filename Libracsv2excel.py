@@ -79,7 +79,10 @@ def process_csv():
 
     # Save and close
     wb.save(output_file)
-    wb.close()
+    #wb.close()
+    
+    app = wb.app
+    app.quit()  # Fully closes Excel if no other workbooks are open
 
     # Show completion message
     messagebox.showinfo("Success", f"Data successfully updated in {output_file} and opened!")
