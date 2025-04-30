@@ -85,7 +85,7 @@ def process_csv():
     messagebox.showinfo("Success", f"Data successfully updated in {output_file} and opened!")
     
     # Open the Excel file automatically
-    #os.startfile(output_file)
+    os.startfile(output_file)
 
 # Create GUI window
 root = tk.Tk()
