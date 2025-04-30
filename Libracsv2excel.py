@@ -72,10 +72,10 @@ def process_csv():
     sheet = wb.sheets[0]  # Select first sheet
 
     # Clear previous data
-    sheet.range("A4").expand().clear_contents()
+    sheet.range("A1").expand().clear_contents()
 
     # Write new DataFrame to Excel
-    sheet.range("A4").value = final_df
+    sheet.range("A1").value = final_df
 
     # Save and close
     wb.save(output_file)
