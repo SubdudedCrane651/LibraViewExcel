@@ -2,9 +2,25 @@ import pandas as pd
 import xlwings as xw
 import tkinter as tk
 from tkinter import filedialog, messagebox
+import json
 import os  # Needed to open the file automatically
 
 def process_csv():
+    # Get the script's directory (useful for EXE packaging)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    json_file_path = os.path.join(script_dir, "Libre2excel.json")
+
+    # Load JSON paths dynamically
+    with open(json_file_path, "r") as json_file:
+        save_paths = json.load(json_file)
+        
+    # Extract paths
+    excel_file = save_paths["excel_file"]
+    image_file = save_paths["image_file"]
+    json_file = save_paths["json_file"]
+    
+    print("Loaded Paths:", save_paths)
+    
     # Open file dialog to select CSV file
     file_path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
 
@@ -62,7 +78,7 @@ def process_csv():
     final_df = final_df.round(1)
 
     # Open existing macro-enabled Excel file
-    output_file = r"C:\\Users\\rchrd\\Documents\\Richard\\glucose_report.xlsm"
+    output_file = excel_file
     try:
         wb = xw.Book(output_file)  # Open existing workbook
     except FileNotFoundError:

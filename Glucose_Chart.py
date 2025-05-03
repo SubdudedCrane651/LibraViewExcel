@@ -2,12 +2,32 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+import json
 from mpl_toolkits.mplot3d import Axes3D  # Required for 3D plotting
 
 # --------------------------
 # Load Excel file and extract data
 # --------------------------
-file_path = r"C:\Users\rchrd\Documents\Richard\glucose_report.xlsm"
+
+# Get the script's directory (useful for EXE packaging)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+json_file_path = os.path.join(script_dir, "Libre2excel.json")
+
+# Load JSON paths dynamically
+with open(json_file_path, "r") as json_file:
+    save_paths = json.load(json_file)
+        
+    # Extract paths
+excel_file = save_paths["excel_file"]
+image_file = save_paths["image_file"]
+json_file = save_paths["json_file"]
+    
+print("Loaded Paths:", save_paths)
+
+# Define file paths
+file_path = excel_file
+image_path = image_file
 
 # Read the Excel file, extracting data from Sheet2
 df = pd.read_excel(file_path, sheet_name="Glycèmie De Richard Perreault", skiprows=3)
@@ -95,29 +115,27 @@ plt.tight_layout()
 # --------------------------
 # Save the chart as a PNG file before showing it
 # --------------------------
-output_image = r"C:\Users\rchrd\Documents\Richard\GlucoseReading3D.png"
+output_image = image_file
 plt.savefig(output_image, dpi=300)
 plt.show()
 
 import win32com.client
-
-# Define file paths
-file_path = r"C:\Users\rchrd\Documents\Richard\glucose_report.xlsm"
-image_path = r"C:\Users\rchrd\Documents\Richard\GlucoseReading3D.png"
 
 # Connect to Excel application
 excel = win32com.client.Dispatch("Excel.Application")
 
 # Check if the file is already open
 for wb in excel.Workbooks:
-    if wb.FullName.lower() == file_path.lower():
+    if wb.FullName.lower().find(file_path.lower().split("/")[-1])!=-1:
         ws = wb.Sheets("Glycèmie De Richard Perreault")  # Select the correct sheet
         
         # **Remove existing images**
         for shape in ws.Shapes:
             if shape.Type == 13:  # 13 = Image type
                 shape.Delete()
-
+                
+        image_path = os.path.normpath(image_file)
+                
         # **Insert the new image at K27 with custom size**
         ws.Shapes.AddPicture(image_path, 1, 1, ws.Range("K27").Left, ws.Range("K27").Top, 640,400)  # Adjust size
 
